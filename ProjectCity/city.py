@@ -30,6 +30,31 @@ class City:
 
         Example: Toulouse,31000,77000
         """
-        name, zipcode, population_str = city_str.split(',')
+        arguments = city_str.split(',')
+        if len(arguments) != 3:
+            raise ValueError("wrong format of city")
+        name, zipcode, population_str = arguments
         population_int_or_none = int(population_str)
         return City(name=name,zipcode=zipcode, population=population_int_or_none)
+    
+    def __add__(self, other):
+        # surcharge operateur '+'
+        if type(other) is int:
+            return self.population + other
+        elif isinstance(other, City):
+            return self.population + other.population
+        else:
+            return NotImplemented
+            
+    
+    def __radd__(self, other):
+        return self.__add__(other)
+
+    def __iadd__(self, other):
+        if type(other) is int:
+            self.population += other
+        elif isinstance(other, City):
+            self.population += other.population
+        else:
+            return NotImplemented
+        return self
